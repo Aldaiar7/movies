@@ -6,4 +6,6 @@ class CoreConfig(AppConfig):
     name = 'movies.core'
     verbose_name = 'core'
 
+    def ready(self):
+        import movies.core.signals
 

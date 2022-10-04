@@ -23,7 +23,7 @@ class Rate(models.Model):
     
     user = models.ForeignKey(User, related_name='user_rate', on_delete=models.CASCADE)
     points = models.IntegerField(choices=Points.choices)
-
+    movie = models.ForeignKey('Movie', related_name='movie_rate', on_delete=models.CASCADE)
 
 class Genre(models.Model):
     name = models.CharField(max_length=255)
@@ -45,7 +45,7 @@ class Movie(models.Model):
     time = models.IntegerField()
     age = models.IntegerField()
     name = models.CharField(max_length=255)
-    rating = models.ForeignKey("Rate", on_delete=models.CASCADE)
+    rating = models.IntegerField(null=True)
     comment = models.ManyToManyField('Comment', related_name='movie_comments', through='MovieComment')
     genre = models.ManyToManyField('Genre', related_name='movie_genre', through='MovieGenre')
     file = models.FileField(upload_to='movies', validators=[FileExtensionValidator(allowed_extensions=['mp4', 'mov'])])
@@ -58,3 +58,5 @@ class MovieComment(models.Model):
 class MovieGenre(models.Model):
     movie = models.ForeignKey('Movie', on_delete=models.CASCADE)
     genre = models.ForeignKey('Genre', on_delete=models.CASCADE)
+
+
