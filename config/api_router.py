@@ -16,5 +16,6 @@ router.register(r'genres', GenreViewSet, basename='genre')
 router.register(r'moviegenres', MovieGenreViewSet, basename='movie_genre')
 
 
+
 app_name = 'api'
 urlpatterns = router.urls
