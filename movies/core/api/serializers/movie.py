@@ -1,9 +1,17 @@
 from rest_framework import serializers
-from movies.core.models import Movie
+from movies.core.models import Movie, MovieGenre
 
 
 class MovieSerializer(serializers.ModelSerializer):
     rating = serializers.IntegerField(read_only=True)
     class Meta:
         model = Movie
-        fields = ['id', 'release_date', 'country', 'time', 'age', 'name', 'director', 'rating']
+        fields = '__all__'
+
+
+
+class MovieGenreSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = MovieGenre
+        fields = '__all__'
