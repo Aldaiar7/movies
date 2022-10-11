@@ -44,10 +44,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.postgres',
 
     #my apps
     'movies.users.apps.UsersConfig',
     'movies.core.apps.CoreConfig',
+
+    # third-party apps
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -148,7 +152,7 @@ MEDIA_URL = '/media/'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ],  
+    ], 
 }
 
 

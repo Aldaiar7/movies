@@ -1,3 +1,5 @@
+from enum import unique
+from io import open_code
 from random import choices
 from django.db import models
 from movies.users.models import User
@@ -23,10 +25,10 @@ class Rate(models.Model):
     
     user = models.ForeignKey(User, related_name='user_rate', on_delete=models.CASCADE)
     points = models.IntegerField(choices=Points.choices)
-
+    movie = models.ForeignKey('Movie', related_name='movie_rate', on_delete=models.CASCADE)
 
 class Genre(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
 
     class Meta:
         indexes = [
@@ -41,14 +43,22 @@ class Director(models.Model):
 class Movie(models.Model):
     release_date = models.DateTimeField()
     country = models.CharField(max_length=255)
-    director = models.ForeignKey('Director', related_name='movie_director', on_delete=models.CASCADE)
+    director = models.ForeignKey('Director', related_name='movie_director', on_delete=models.CASCADE, null=True)
     time = models.IntegerField()
     age = models.IntegerField()
     name = models.CharField(max_length=255)
-    rating = models.ForeignKey("Rate", on_delete=models.CASCADE)
+    rating = models.IntegerField(null=True)
     comment = models.ManyToManyField('Comment', related_name='movie_comments', through='MovieComment')
     genre = models.ManyToManyField('Genre', related_name='movie_genre', through='MovieGenre')
-    file = models.FileField(upload_to='movies', validators=[FileExtensionValidator(allowed_extensions=['mp4', 'mov'])])
+    cover = models.FileField(upload_to='covers', validators=[FileExtensionValidator(allowed_extensions=['png', 'jpeg', 'jpg'])], null=True)
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['name']),
+            models.Index(fields=['country']),
+            models.Index(fields=['age'])
+        ]
+
 
 class MovieComment(models.Model):
     movie = models.ForeignKey('Movie', on_delete=models.CASCADE)
@@ -58,3 +68,9 @@ class MovieComment(models.Model):
 class MovieGenre(models.Model):
     movie = models.ForeignKey('Movie', on_delete=models.CASCADE)
     genre = models.ForeignKey('Genre', on_delete=models.CASCADE)
+
+
+
+class MovieFile(models.Model):
+    movie = models.ForeignKey('Movie', on_delete=models.CASCADE)
+    file = models.FileField(upload_to='movies', validators=[FileExtensionValidator(allowed_extensions=['mov', 'mp4'])])
